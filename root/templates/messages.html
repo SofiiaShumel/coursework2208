@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <title>Messages</title>
+</head>
+
+
+
+<body>
+{% extends 'admin_base.html' %}
+{%block content %}
+{{ super() }}
+<a href="{{url_for('create_message')}}" class="btn btn-primary">Create new message</a>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">User </th>
+        <th scope="col">Tittle </th>
+        <th scope="col">Body</th>
+        <th scope="col">Creation date</th>
+        <th scope="col">Messenger</th>
+        <th scope="col">Category</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for message in all_messages %}
+    <tr>
+        <td>{{message.message_id}}</td>
+        <td>
+
+            {% for user in all_users if user.user_id == message.user_fk %}
+                {{user.display_name}}
+            {% endfor %}
+        </td>
+
+        <td>{{message.tittle}}</td>
+        <td>{{message.body}}</td>
+        <td>{{message.creation_date}}</td>
+
+        <td>
+
+            {% for messenger in all_messengers if messenger.messenger_id == message.messenger_fk %}
+                {{messenger.messenger_name}}
+            {% endfor%}
+        </td>
+        <td>
+            {% for category in all_categories if category.category_id == message.category_fk%}
+                {{category.category_name}}
+            {% endfor %}
+
+        </td>
+
+        <td class="d-flex justify-content-end">
+            <a href="{{url_for('update_message', message_id = message.message_id)}}" class="btn btn-success">Edit</a>
+            <a href="{{url_for('delete_message', message_id = message.message_id)}}" class="btn btn-danger">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+
+{%endblock%}
+
+
+</body>
+</html>
